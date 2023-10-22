@@ -72,9 +72,9 @@ class OrderBook {
     }
 
     async getBids() {
-    this.bids = this.bidsHash ? await this.getFromDHT(this.bidsHash, (data) => {
-        return JSON.parse(data.v);
-        }) : this.bids;
+    // this.bids = this.bidsHash ? await this.getFromDHT(this.bidsHash, (data) => {
+    //     return JSON.parse(data.v);
+    //     }) : this.bids;
       return this.bids;
     }
   
