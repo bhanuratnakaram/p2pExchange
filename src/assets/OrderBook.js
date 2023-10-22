@@ -5,8 +5,9 @@ class OrderBook {
       this.asks = [];
       this.trades = [];
     }
-    async storeToDHT(order, callback) {
-        await this.link.put({ v: JSON.stringify(order) }, (err, hash) => {
+    async storeToDHT(type, orders, callback) {
+        //TBD store this to DHT with key type as property k
+        await this.link.put({ v: JSON.stringify(orders) }, (err, hash) => {
           if (err) {
             console.error('Error saving data to DHT:', err);
           } else {
@@ -17,7 +18,8 @@ class OrderBook {
       }
 
     //get from DHT
-    async getFromDHT(hash, callback) {
+    async getFromDHT(type, hash, callback) {
+        //TBD get this from DHT with key type as property k
         await this.link.get(hash, (err, data) => {
           if (err) {
             console.error('Error getting data from DHT:', err);
@@ -54,6 +56,7 @@ class OrderBook {
     }
     
     async addAsk(ask) {
+        //TBD : the asks has should be derived from string 'asks' and asks should be retrieved from DHT      
         this.asks = this.asksHash ? await this.getFromDHT(this.asksHash, (data) => {
             return JSON.parse(data.v);
           }) : this.asks;
@@ -72,6 +75,7 @@ class OrderBook {
     }
 
     async getBids() {
+    //TBD: retrieve this from 'bids' hash key from DHT
     // this.bids = this.bidsHash ? await this.getFromDHT(this.bidsHash, (data) => {
     //     return JSON.parse(data.v);
     //     }) : this.bids;
@@ -79,35 +83,43 @@ class OrderBook {
     }
   
     getAsks() {
+      //TBD: retrieve this from 'asks' hash key from DHT
       return this.asks;
     }
     getTrades() {
+          //TBD: retrieve this from 'trades' hash key from DHT
         return this.trades;
       }
     updateBestBid() {
+        //TBD update this to DHT
         this.bids.sort((a, b) => b.price - a.price);
     }  
     
     updateBestAsk() {
+        //TBD update this to DHT
     this.asks.sort((a, b) => a.price - b.price);
     }
     getBestBid(order) {
+      //TBD get this from DHT
       return this.bids.length>0 ? this.bids[0]:order;
     }
   
     getBestAsk(order) {
+      //TBD get this from DHT
       return this.asks.length>0 ? this.asks[0]:order;
     }
     removeBestBid() {
-        console.log(JSON.stringify(this.bids));
         this.bids.shift();
-        console.log(JSON.stringify(this.bids));
+        console.log('best bid removed');
         this.updateBestBid();
+        //TBD update new bids to DHT with key 'bids'
     }
 
     removeBestAsk() {
         this.asks.shift();
+        console.log('best ask removed');
         this.updateBestAsk();
+        //TBD update new asks to DHT with key 'asks'
     }
   }
   //export OrderBook

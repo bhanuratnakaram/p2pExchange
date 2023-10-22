@@ -16,17 +16,24 @@ class MatchingEngine {
   async matchOrders() {
     const bids = await this.orderBook.getBids();
     const asks = await this.orderBook.getAsks();
+    console.log('bids and asks and trades in matchOrders');
     console.log(bids)
     console.log(asks)
     const trades = await this.matchOrdersInternal(bids, asks);
-    console.log(trades);
-    console.log(Array.isArray(trades))
+    //add updated bids and asks in order book to DHT
+    // await this.orderBook.storeToDHT(this.orderBook.bids, (hash) => {
+    //   this.orderBook.bidsHash = hash;
+    // });
+    // await this.orderBook.storeToDHT(this.orderBook.asks, (hash) => {
+    //   this.orderBook.asksHash = hash;
+    // });
     if (Array.isArray(trades)) {
       for (const trade of trades) {
         await this.orderBook.addTrade(trade);
       }
     }
-    console.log(this.orderBook.trades);
+    console.log(trades);
+
   }
 
   async matchOrdersInternal(bids, asks) {
@@ -41,8 +48,7 @@ class MatchingEngine {
         const quantity = Math.min(bid.quantity, ask.quantity);
         trades.push({ price: ask.price, quantity });
         bid.quantity -= quantity;
-        ask.quantity -= quantity;
-  
+        ask.quantity -= quantity;        
         if (bid.quantity === 0) {
           await this.orderBook.removeBestBid(bid);
           i++;
