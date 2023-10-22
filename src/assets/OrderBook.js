@@ -50,7 +50,7 @@ class OrderBook {
       }) : this.bids;
       this.bids.push(bid);
       this.updateBestBid();
-      await this.storeToDHT(this.bids, (hash) => {
+      await this.storeToDHT('bids', this.bids, (hash) => {
         this.bidsHash = hash;
       });
     }
@@ -62,14 +62,14 @@ class OrderBook {
           }) : this.asks;
         this.asks.push(ask);
         this.updateBestAsk();
-      await this.storeToDHT(this.asks, (hash) => {
+      await this.storeToDHT('asks', this.asks, (hash) => {
         this.asksHash = hash;
 
       });
     }
     async addTrade(trade) {
         this.trades.push(trade);
-        await this.storeToDHT(trade, (hash) => {
+        await this.storeToDHT('trades',this.trades, (hash) => {
             this.tradesHash = hash;
         });
     }
