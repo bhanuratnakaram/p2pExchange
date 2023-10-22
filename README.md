@@ -36,3 +36,5 @@ To workout storing the orders using key value pair in DHT. The current grenache 
 The idea is  - store bids with key `bids`, asks with key `asks`. When order is sent, addBid/addAsk will retrieve all the bids/asks from DHT, sort it, and push back to DHT after order matching process is completed by the matching engine. That is because matching engine can modify some buy and sell orders. The distributed orders can be achieved this way. In other words, every time order is placed, the whole DHT is replaced with new set of orders on completion of trade matching. 
 
 In ideal world, each asset pair can have separate matching engines to avoid high traffic. 
+
+Search for TBD in the code to find where the code to add key value pair can be added to make it work with DHT.
